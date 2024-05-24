@@ -52,13 +52,14 @@
                             <div class ="d-flex justify-content-center mb-3">
                                 <img src="{{ $product->images[0]->url }}" alt="image_baju.png" style="width: 100%">
                             </div>
+                            <h5 class="text-dark">{{ str($product->name)->title() }}</h5>
                             <p class="card-text" style="color: #292929">
                                 {{ str($product->description)->limit(100) }}
                             </p>
                         </div>
                         <div class="card-footer d-flex justify-content-end gap-2 py-3">
                             <a 
-                                href="/"
+                                href="{{ route('product.show', ['product' => $product]) }}"
                                 class="btn text-dark" 
                                 style="background-color: #8ba888">
                                 Details
