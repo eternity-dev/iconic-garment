@@ -18,6 +18,7 @@ class GarmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'username' => $this->faker->userName(),
             'name' => $this->faker->company(),
             'email' => $this->faker->companyEmail(),
             'password' => Hash::make('password'),

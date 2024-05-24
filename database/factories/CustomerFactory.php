@@ -18,6 +18,7 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         return [
+            'username' => $this->faker->userName(),
             'name' => $this->faker->name(),
             'email' => $this->faker->safeEmail(),
             'password' => Hash::make('password'),
