@@ -28,9 +28,9 @@ class RegisterController extends Controller
         $data['password'] = Hash::make($data['password']);
 
         $user = new Customer($data);
-        $user->save();
 
-        if (Auth::login($user)) {
+        if ($user->save()) {
+            Auth::login($user);
             $request->session()->regenerate();
             return redirect()->to('/');
         }

@@ -20,16 +20,13 @@ class LoginController extends Controller
             'password' => ['required', 'min:8']
         ]);
 
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($data) || Auth::guard('garment')->attempt($data)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
-        } else if (Auth::guard('garment')->attempt($data)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
-        }
+            return redirect()->to('/');
+        } 
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.'
+            'message' => 'The provided credentials do not match our records.'
         ])->onlyInput('email');
     }
 }
