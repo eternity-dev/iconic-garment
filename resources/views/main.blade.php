@@ -44,9 +44,19 @@
                     <div class="card text-light p-0" style="max-width: 540px; background-color: #ffffff">
                         <div class="card-header d-flex gap-3 align-items-center bg-light">
                             <img src="{{ $product->garment->image_url }}" alt="ptbrothers.png" width="45" height="45">
-                            <span class="text-dark p-0 m-0">
-                                {{ $product->garment->name }}
-                            </span>
+                            @if (auth()->check())
+                                <span class="text-dark p-0 m-0">
+                                    {{ $product->garment->name }}
+                                </span>
+                            @elseif (auth()->guard('garment')->check())
+                                @if ($product->garment->id == auth()->guard('garment')->user()->id) 
+                                    <span class="text-dark">Me</span>
+                                @else
+                                    <span class="text-dark p-0 m-0">
+                                        {{ $product->garment->name }}
+                                    </span>
+                                @endif
+                            @endif
                         </div>
                         <div class="card-body">
                             <div class ="d-flex justify-content-center mb-3">
@@ -65,7 +75,7 @@
                                 Details
                             </a>
                             <a
-                                href="/"
+                                href="{{ route('order.create', ['product' => $product]) }}"
                                 class="btn text-light" 
                                 style="background-color: #44624a">
                                 Order

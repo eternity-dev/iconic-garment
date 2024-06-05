@@ -12,12 +12,12 @@
         <div class="card-body w-100 pe-4 py-4">
             <div class="row pe-1">
                 <div class="col-4 d-flex justify-content-center">
-                    <img src="{{ $data['user']->image_url ?? '/images/profile.jpg' }}" alt="User profile image" width="200" height="200">
+                    <img src="{{ (auth()->check() ? $data['user']->image_url : Storage::url($data['user']->image_url)) ?? '/images/profile.jpg' }}" alt="User profile image" width="200" height="200">
                 </div>
                 <div class="col">
                     <h1 class="fs-5" style="color: #292929">{{ $data['user']->name }}</h1>
                     <h2 class="fs-5" style="color: #44624a">{{ '@' . $data['user']->username }}</h2>
-                    <form action="{{ route('user.profile.update') }}" method="POST">
+                    <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @method('put')
                         @csrf
                         <h6 class="mt-4">Data Personal</h6>
@@ -31,7 +31,7 @@
                                     id="email"
                                     name="profile[email]" 
                                     value="{{ $data['user']->email }}" />
-                                @error('email')
+                                @error('profile.email')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
@@ -48,12 +48,23 @@
                                     id="phone"
                                     name="profile[phone]" 
                                     value="{{ $data['user']->phone }}" />
-                                @error('phone')
+                                @error('profile.phone')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="formFile" class="col-sm-4 col-form-label">Garment's Logo</label>
+                            <div class="col">
+                                <input class="form-control" name="profile[logo]" type="file" id="formFile">
+                            </div>
+                            @error('profile.logo')
+                                <small class="text-danger">
+                                    {{ $message }}
+                                </small>
+                            @enderror
                         </div>
                         <h6 class="mt-4">Data Alamat</h6>
                         <div class="mb-3 row" style="color: #44624a">
@@ -65,7 +76,7 @@
                                     class="form-control"
                                     id="address"
                                     name="address[address]">{{ $data['user']->address->address }}</textarea>
-                                @error('address')
+                                @error('address.address')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
@@ -82,7 +93,7 @@
                                     id="city" 
                                     name="address[city]"
                                     value="{{ $data['user']->address->city }}" />
-                                @error('city')
+                                @error('address.city')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
@@ -99,7 +110,7 @@
                                     id="province" 
                                     name="address[province]"
                                     value="{{ $data['user']->address->province }}" />
-                                @error('province')
+                                @error('address.province')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
@@ -116,7 +127,7 @@
                                     id="country" 
                                     name="address[country]"
                                     value="{{ $data['user']->address->country }}" />
-                                @error('country')
+                                @error('address.country')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>
@@ -133,7 +144,7 @@
                                     id="zip" 
                                     name="address[zip]"
                                     value="{{ $data['user']->address->zip }}" />
-                                @error('zip')
+                                @error('address.zip')
                                     <small class="text-danger">
                                         {{ $message }}
                                     </small>

@@ -15,21 +15,29 @@
                         <h3>{{ str($data['product']->name)->title() }}</h3>
                         <span class="d-flex align-items-center gap-1 text-muted">
                             <span class="pe-3">Posted By </span>
-                            <span class="pe-1">
-                                <img 
-                                    src="{{ $data['product']->garment->image_url }}" 
-                                    alt="Garment's profile image"
-                                    style="width: 1.6rem; margin-top: -5px">
-                            </span>
-                            <span class="fw-bold">{{ $data['product']->garment->name }} </span>
-                            <span>({{ $data['product']->garment->phone }})</span>
+                            @if (auth()->check())
+                                <span class="pe-1">
+                                    <img 
+                                        src="{{ $data['product']->garment->image_url }}" 
+                                        alt="Garment's profile image"
+                                        style="width: 1.6rem; margin-top: -5px">
+                                </span>
+                                <span class="fw-bold">{{ $data['product']->garment->name }} </span>
+                                <span>({{ $data['product']->garment->phone }})</span>
+                            @elseif (auth()->guard('garment')->check())
+                                @if ($data['product']->garment->id == auth()->guard('garment')->user()->id) 
+                                    <span style="margin-left: -1rem">Me</span>
+                                @endif
+                            @endif
                         </span>
                     </div>
                     <div>
+                        @if (auth()->check())
                         <a 
-                            href="/" 
+                            href="{{ route('order.create', ['product' => $data['product']]) }}" 
                             class="btn text-light" 
                             style="background-color: #44624a">Order Now</a>
+                        @endif
                     </div>
                 </header>
                 <main class="mt-4">

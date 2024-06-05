@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -12,7 +13,7 @@ class ProfileController extends Controller
         return view('profile.index', [
             'title' => 'My Profile',
             'data' => [
-                'user' => auth()->user()
+                'user' => auth()->check() ? auth()->user() : auth()->guard('garment')->user()
             ]
         ]);
     }
@@ -27,10 +28,18 @@ class ProfileController extends Controller
             'address.province' => ['nullable', 'string'],
             'address.country' => ['nullable', 'string'],
             'address.zip' => ['nullable', 'string'],
+            'profile.logo' => ['nullable', 'image']
         ]);
 
+        
         $user = auth()->check() ? auth()->user() : auth()->guard('garment')->user();
         $userAddress = $user->address;
+        
+        if ($data['profile']['logo']) {
+            if (Storage::delete(storage_path($user->image_url))) {
+                $user->image_url = $data['profile']['logo']->storeAs('garments', uniqid('garment-') . 'jpg', 'public');
+            }
+        }
 
         $user->email = $data['profile']['email'];
         $user->phone = $data['profile']['phone'];

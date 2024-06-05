@@ -52,18 +52,25 @@
                               class="nav-link {{ url()->current() == route('global.main') ? 'active' : '' }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/" class="nav-link">Orders</a>
+                            <a href="{{ route('order.index') }}" class="nav-link {{ url()->current() == route('order.index') ? 'active' : '' }}">Orders</a>
                         </li>
                         <li class="nav-item">
                             <a 
                               href="{{ route('user.profile.index') }}" 
                               class="nav-link {{ url()->current() == route('user.profile.index') ? 'active' : '' }}">My Profiles</a>
                         </li>
+                        @if (auth()->guard('garment')->check()) 
+                            <li class="nav-item">
+                                <a 
+                                href="{{ route('garment.product.index') }}" 
+                                class="nav-link {{ url()->current() == route('garment.product.index') ? 'active' : '' }}">My Products</a>
+                            </li>
+                        @endif
                     @endif
                 </ul>
                 @if (auth()->check() || auth()->guard('garment')->check())
                     <span class="text-light">
-                        Hello there, {{ auth()->user()->name }}
+                        Hello there, {{ auth()->check() ? auth()->user()->name : auth()->guard('garment')->user()->name }}
                     </span>
                 @endif
                 <div>
